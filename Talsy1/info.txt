@@ -1,0 +1,93 @@
+
+____________encarpetado.
+talsy/
+│
+├── env/                    # Entorno virtual de Miniconda
+├── app/                    # Código principal del backend
+│   ├── __init__.py
+│   ├── main.py             # Punto de entrada de la API FastAPI
+│   ├── models.py           # Definición de modelos de BD (ORM)
+│   ├── database.py         # Conexión y configuración de la BD
+│   ├── services/           # Lógica de negocio y microservicios
+│   │   ├── extract.py      # Extracción de datos desde PDFs
+│   │   ├── email_service.py # Servicio para envío de correos
+│   │   └── nlp_processor.py # Procesamiento de textos con NLP
+│   └── routers/            # Rutas de la API (endpoints FastAPI)
+│       ├── __init__.py
+│       └── candidates.py   # Endpoints relacionados con candidatos
+│
+├── frontend/               # Código del frontend con React (opcional)
+│   ├── public/             # Archivos estáticos
+│   └── src/                # Código fuente de React
+│       ├── App.js
+│       ├── components/     # Componentes React
+│       └── services/       # Llamadas a la API
+│
+├── data/                   # Almacenamiento temporal de archivos PDF
+│   └── samples/            # PDFs de prueba
+│
+├── tests/                  # Pruebas unitarias y de integración
+│   └── test_extract.py     # Pruebas del extractor de PDFs
+│
+├── .env                    # Variables de entorno (credenciales, configs)
+├── requirements.txt        # Dependencias de Python
+├── environment.yml         # Archivo de Conda para crear el entorno
+└── README.md               # Documentación del proyecto
+
+
+
+
+arquitectura 
+                      +-------------------------------+
+                      |         Frontend (React)       |
+                      |-------------------------------|
+                      | - Formulario de carga PDF      |
+                      | - Dashboard de candidatos      |
+                      | - Gestión de estados           |
+                      +---------------+---------------+
+                                      |
+                                      v (HTTP Request)
+                +----------------------------------------------+
+                |                 Backend (FastAPI)            |
+                |----------------------------------------------|
+                |        +----------------------------+        |
+                |        | PDF Extraction Service     |        |
+                |        | - Extrae texto con PyMuPDF |        |
+                |        +----------------------------+        |
+                |                       |                       |
+                |                       v                       |
+                |        +----------------------------+        |
+                |        | NLP Processing Service      |        |
+                |        | - Identifica lenguajes y    |        |
+                |        |   habilidades con spaCy     |        |
+                |        +----------------------------+        |
+                |                       |                       |
+                |                       v                       |
+                |        +----------------------------+        |
+                |        | Email Service               |        |
+                |        | - Envía correos con pruebas |        |
+                |        |   técnicas usando SMTP      |        |
+                |        +----------------------------+        |
+                +----------------------------------------------+
+                                      |
+                    +-----------------+----------------+
+                    |                                  |
+         (Guardar en BD)                      (Actualizar Estado)
+                    |                                  |
+                    v                                  v
+      +-----------------------+              +----------------------+
+      |     PostgreSQL DB      |              |    Dashboard en      |
+      |-----------------------|              |     Frontend (React)  |
+      | - Almacena datos de    |              |                      |
+      |   candidatos, estados, |              | - Estado del         |
+      |   y resultados         |              |   candidato          |
+      +-----------------------+              +----------------------+
+                    ^
+                    | (Acceso a datos desde el Backend)
+                    |
+       +--------------------------------+
+       |       Almacenamiento Temporal  |
+       |-------------------------------|
+       | - PDFs cargados se guardan     |
+       |   temporalmente en /data       |
+       +--------------------------------+

@@ -1,0 +1,14 @@
+name: talsy-env
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9
+  - spacy
+  - numpy
+  - pandas
+  - scikit-learn
+  - pip
+  - pip:
+      - pdfminer.six
+      - openpyxl
